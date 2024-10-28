@@ -7,13 +7,7 @@ class Client(models.Model):
     code = models.CharField(
         max_length=6, unique=True, editable=False, blank=True, null=True
     )
-    contact = models.ForeignKey(
-        "Contact",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="clients",
-    )
+    contact = models.ManyToManyField("Contact", related_name="clients")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

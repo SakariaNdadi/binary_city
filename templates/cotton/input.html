@@ -7,9 +7,18 @@
 
 <c-vars type="text" errors />
 
-<div x-data="{ showError: {% if field_errors %} true {% endif %}, errorTimer: {% if errorTimer %}{{ errorTimer}}{% else %}null{% endif %} }"
-    x-init="if (showError && errorTimer && errorTimer > 0) { setTimeout(() => { showError = false }, errorTimer);}"
-    class="flex w-full flex-col gap-1 text-neutral-600 dark:text-neutral-300">
+<div x-data="{ 
+    errors: '', 
+    showError: false, 
+    errorTimer: {% if errorTimer %}{{ error_timer }}{% else %}null{% endif %} 
+    }" x-init="
+        if ({% if field_errors %}true{% else %}false{% endif %}) {
+        showError = true; 
+        errors = true; 
+        if (errorTimer && errorTimer > 0) { 
+            setTimeout(() => { showError = false; }, errorTimer); 
+        }
+    }" class="flex w-full flex-col gap-1 text-neutral-600 dark:text-neutral-300">
     {% if label %}
     <label for="{{ id }}" class="w-fit pl-0.5 text-sm">{{ label }}</label>
     {% endif %}

@@ -10,3 +10,12 @@ class ContactForm(forms.ModelForm):
             "surname",
             "email",
         )
+
+
+class ClientForm(forms.ModelForm):
+    class Meta:
+        model = models.Client
+        fields = (
+            "name",
+            "contact",
+        )

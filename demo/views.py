@@ -19,7 +19,8 @@ class ClientCreateView(CreateView):
     model = models.Client
     template_name = "client_create.html"
     success_url = reverse_lazy("home")
-    fields = ("name", "contact")
+    form_class = forms.ClientForm
+    # fields = ("name", "contact")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
