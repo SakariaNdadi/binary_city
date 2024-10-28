@@ -1,8 +1,14 @@
+{% extends '_base.html' %}
+
+{% block title %}Create Client{% endblock title %}
+
+{% block content %}
 <form action="{% url 'client_create' %}" method="post">
     {% csrf_token %}
     <c-input id="name" label="name" name="name" placeholder="Enter client name" required />
     <br>
-    <c-select id="contacts" label="Select Contact To link" :data="contacts" />
+    <c-select-multiple id="contacts" label="Select Contact To link" :data="contact_list" />
     <br>
     <c-button id="client_form_submit" title="Create Client" type="submit" />
 </form>
+{% endblock content %}

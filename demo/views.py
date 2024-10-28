@@ -10,7 +10,7 @@ def index(request):
     contacts = models.Contact.objects.all()
     context = {
         "clients": list(clients.values()),
-        # "contacts": list(contacts.values()),
+        "contacts": list(contacts.values()),
     }
     return render(request, "index.html", context)
 
