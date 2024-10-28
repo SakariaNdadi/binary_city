@@ -1,0 +1,26 @@
+{% extends '_base.html' %}
+{% block title %}Binary City{% endblock title %}
+{% block content %}
+
+<section class="">
+    <div class="grid grid-cols-2">
+        <c-modal id="client_create" header="Create Client" label="Create Client">
+            <div class="w-56">
+                {% include 'client_create.html' %}
+            </div>
+        </c-modal>
+        <div class="">
+            <c-button id="contact_create_form" title="Create Contact" url="contact/create" />
+        </div>
+    </div>
+    <br>
+    <div class="pb-5">
+        <c-h1 title="Client Table" />
+        <c-table :th="['id','name','code','contacts']" :tr="clients" paginate_by="5" search />
+    </div>
+    <div>
+        <c-h1 title="Contact Table" />
+        <c-table :th="['id','surname','name','email']" :tr="contacts" paginate_by="2" />
+    </div>
+</section>
+{% endblock content %}

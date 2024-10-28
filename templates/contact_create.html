@@ -1,0 +1,17 @@
+{% extends '_base.html' %}
+
+{% block title %}Create Contact{% endblock title %}
+
+{% block content %}
+<form method="post" action="{% url 'contact_create' %}">
+    {% csrf_token %}
+    <c-input id="name" label="Name" name="name" placeholder="Enter contact name" required />
+    <br>
+    <c-input id="surnname" label="Surname" name="surname" placeholder="Enter contact name" required />
+    <br>
+    <c-input id="email" label="Email" type="email" name="email" placeholder="eg, john@email.com" errorTimer="1000"
+        required />
+    <br>
+    <c-button id="contact_form_submit" title="Create Contact" type="submit" />
+</form>
+{% endblock content %}
