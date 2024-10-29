@@ -15,7 +15,4 @@ class ContactForm(forms.ModelForm):
 class ClientForm(forms.ModelForm):
     class Meta:
         model = models.Client
-        fields = (
-            "name",
-            "contact",
-        )
+        fields = ("name",)

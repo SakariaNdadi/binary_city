@@ -3,23 +3,144 @@
 {% block content %}
 
 <section class="">
-    <div class="grid grid-cols-2">
-
+    <div class="pb-5">
+        <c-h1 title="Client Table" />
         <div class="">
-            <c-button id="client_create_form" title="Create Client" url="client/create" />
+            <c-button id="client_create_form" title="Create Client" url="{% url 'client_create' %}" />
         </div>
-        <div class="">
-            <c-button id="contact_create_form" title="Create Contact" url="contact/create" />
+
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                {% if clients %}
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            id
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            name
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            client code
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            no. of linked contacts
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                    <tr
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <td class="px-6 py-4">
+                            {{ client.id }}
+                        </td>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ client.name }}
+                        </th>
+                        <td class="px-6 py-4">
+                            {{ client.code }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex justify-center">
+                                {% if client.contacts.exists %}
+                                {{ client.contacts.count }}
+                                {% else %}
+                                No Contacts For This Client
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% else %}
+                <tr
+                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td class="px-6 py-4">No client(s) found.</td>
+                </tr>
+                {% endif %}
+            </table>
         </div>
     </div>
     <br>
-    <div class="pb-5">
-        <c-h1 title="Client Table" />
-        <c-table :th="['id','name','code','contacts']" :tr="clients" paginate_by="5" search />
-    </div>
+    <br>
+    <br>
     <div>
         <c-h1 title="Contact Table" />
+        <div class="">
+            <c-button id="contact_create_form" title="Create Contact" url="contact/create" />
+        </div>
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                {% if clients %}
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            id
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            surname
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            name
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            email
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            no. of linked clients
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            <span class="sr-only">Edit</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contact in contacts %}
+                    <tr
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <td class="px-6 py-4">
+                            {{ contact.id }}
+                        </td>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ contact.surname }}
+                        </th>
+                        <td class="px-6 py-4">
+                            {{ contact.name }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ contact.email }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex justify-center">
+                                {% if contact.client_count %}
+                                {{ contact.client_count }}
+                                {% else %}
+                                No clients linked for this contact
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <a href="{% url 'client_link' contact.id %}"
+                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Link
+                                Client</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% else %}
+                <tr
+                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td class="px-6 py-4">No client(s) found.</td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+
+
+        {% comment %}
         <c-table id="contact_table" :th="['id','surname','name','email']" :tr="contacts" paginate_by="5" />
+        {% endcomment %}
     </div>
 </section>
 {% endblock content %}

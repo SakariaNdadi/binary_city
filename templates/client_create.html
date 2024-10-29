@@ -7,8 +7,6 @@
     {% csrf_token %}
     <c-input id="name" label="name" name="name" placeholder="Enter client name" required />
     <br>
-    <c-select-multiple id="contacts" label="Select Contact To link" name="contact" :data="contact_list" />
-    <br>
     <c-button id="client_form_submit" title="Create Client" type="submit" />
 </form>
 

@@ -1,15 +1,19 @@
-from django.shortcuts import render
+from django.db.models import Count
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import CreateView, DetailView, UpdateView, ListView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from . import forms
 from . import models
 
 
-def index(request):
+def index(request, **kwargs):
     clients = models.Client.objects.all()
-    contacts = models.Contact.objects.all()
+    # contacts = models.Contact.objects.all()
+    contacts = models.Contact.objects.annotate(client_count=Count("client")).values(
+        "id", "name", "surname", "email", "client_count"
+    )
     context = {
-        "clients": list(clients.values()),
+        "clients": clients,
         "contacts": list(contacts.values()),
     }
     return render(request, "index.html", context)
@@ -34,6 +38,30 @@ class ContactCreateView(CreateView):
     success_url = reverse_lazy("home")
     form_class = forms.ContactForm
     # fields = ("name", "surname", "email")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["client_list"] = models.Client.objects.all()
+        return context
+
+
+class ClientLink(UpdateView):
+    model = models.Contact
+    template_name = "link_contact.html"
+    fields = ("client",)
+    success_url = reverse_lazy("home")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["client_list"] = models.Client.objects.all()
+        return context
+
+
+def unlink_client(request, contact_id, client_id):
+    contact = get_object_or_404(models.Contact, id=contact_id)
+    client = get_object_or_404(models.Client, id=client_id)
+    contact.client.remove(client)
+    return redirect(reverse("client_link", args=[contact_id]))
 
 
 class ContactDetailView(DetailView):

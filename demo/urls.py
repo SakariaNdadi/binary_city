@@ -10,4 +10,10 @@ urlpatterns = [
         views.ContactDetailView.as_view(),
         name="contact_detail",
     ),
+    path("client/<int:pk>/link/", views.ClientLink.as_view(), name="client_link"),
+    path(
+        "client/<int:client_id>/unlink/<int:contact_id>/",
+        views.unlink_client,
+        name="client_unlink",
+    ),
 ]
