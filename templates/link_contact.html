@@ -3,7 +3,7 @@
 {% block title %}Link Client{% endblock title %}
 
 {% block content %}
-<form method="post">
+<form method="post" id="form">
     {% csrf_token %}
     <c-input id="name" label="Name" value="{{object.name}}" placeholder="Enter contact name" disabled />
     <br>
@@ -34,7 +34,7 @@
             <tbody>
                 {% if object.client.exists %}
                 {% for client in object.client.all %}
-                <tr
+                <tr id="hx"
                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td class="px-6 py-4">
                         {{ client.id }}
@@ -46,10 +46,11 @@
                         {{ client.code }}
                     </td>
                     <td class="px-6 py-4 text-right">
-                        <a href="{% url 'client_unlink' client.id contact.id %}"
+                        <span hx-post="{% url 'client_unlink' client.id contact.id %}" hx-trigger="click"
+                            hx-swap="innerHtml" hx-target="#hx"
                             onclick="return confirm('Are you sure you want to unlink this client?');"
-                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Unlink
-                            Client</a>
+                            class="cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">Unlink
+                            Client</span>
                     </td>
                 </tr>
                 {% endfor %}
@@ -68,7 +69,8 @@
     <c-select-multiple id="client_select" name="client" label="Select Client To link" :values="object.client.all"
         :data="client_list" />
     <br>
-    <c-button id="contact_form_submit" title="Link Client" type="submit" />
+    <c-button id="contact_form_submit" title="Link Client" hx-post="{% url 'client_link' object.pk %}"
+        hx-trigger="click" hx-swap="outerHtml" hx-target="#form" />
 </form>
 
 
