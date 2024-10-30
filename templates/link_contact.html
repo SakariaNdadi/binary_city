@@ -1,5 +1,5 @@
 {% extends '_base.html' %}
-
+{% load dcc_tags %}
 {% block title %}Link Client{% endblock title %}
 
 {% block content %}
@@ -65,9 +65,17 @@
     <br>
     <c-h1 title="If you select client and click 'Link Client' the client will update"
         class="text-red-600 font-semibold" />
-    <c-select-multiple id="client_select" name="client" label="Select Client To link" value="{{object.client}}"
+    <c-select-multiple id="client_select" name="client" label="Select Client To link" :values="object.client.all"
         :data="client_list" />
     <br>
     <c-button id="contact_form_submit" title="Link Client" type="submit" />
 </form>
+
+
+<script>
+    console.log(
+        "Client value:", "{% if object.client.exists %}{% for client in object.client.all %}{{ client.id }} {% if not forloop.last %}, {% endif %}{% endfor %}{% endif %} "
+    );
+</script>
+
 {% endblock content %}

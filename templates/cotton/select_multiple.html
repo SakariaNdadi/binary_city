@@ -1,67 +1,65 @@
+{% load dcc_tags %}
 <div x-data="{
-    options: [
-    {% if options %}
-        {% for option in options %}
-            {
-            label: '{{ option }}',
-            value: '{{ option }}'
-            },
-        {% endfor %}
-    {% else %}
-        {% for option in data %}
-            {
-            label: '{{ option }}',
-            value: '{{ option.id }}'
-            },
-        {% endfor %}
-    {% endif %}
-    ],
-    isOpen: false,
-    openedWithKeyboard: false,
-    selectedOptions: [],
-    setLabelText() {
-    const count = this.selectedOptions.length;
-
-    // if there are no selected options
-    if (count === 0) return 'Please Select';
-
-    // join the selected options with a comma
-    return this.selectedOptions.join(', ');
-    },
-    highlightFirstMatchingOption(pressedKey) {
-    // if Enter pressed, do nothing
-    if (pressedKey === 'Enter') return
-
-    // find and focus the option that starts with the pressed key
-    const option = this.options.find((item) =>
-    item.label.toLowerCase().startsWith(pressedKey.toLowerCase()),
-    )
-    if (option) {
-    const index = this.options.indexOf(option)
-    const allOptions = document.querySelectorAll('.combobox-option')
-    if (allOptions[index]) {
-    allOptions[index].focus()
-    }
-    }
-    },
-    handleOptionToggle(option) {
-    if (option.checked) {
-    this.selectedOptions.push(option.value)
-    } else {
-    // remove the unchecked option from the selectedOptions array
-    this.selectedOptions = this.selectedOptions.filter(
-    (opt) => opt !== option.value,
-    )
-    }
-    // set the value of the hidden field to the selectedOptions array
-    this.$refs.hiddenTextField.value = this.selectedOptions
-    },
-    }" x-init="console.log(selectedOptions)" class="w-full max-w-xs flex flex-col gap-1"
+        options: [
+            {% if options %}
+                {% for option in options %}
+                    {
+                    label: '{{ option }}',
+                    value: '{{ option }}'
+                    },
+                {% endfor %}
+            {% else %}
+                {% for option in data %}
+                    {
+                    label: '{{ option }}',
+                    value: '{{ option.id }}'
+                    },
+                {% endfor %}
+            {% endif %}
+        ],
+        isOpen: false,
+        openedWithKeyboard: false,
+        selectedOptions: [
+            {% if values and options %}
+                {% for option in values %}'{{ option }}'{% if not forloop.last %}, {% endif %}{% endfor %}
+            {% endif %}
+            {% if values and data %}
+                {% for option in values %}'{{ option.id }}'{% if not forloop.last %}, {% endif %}{% endfor %}
+            {% endif %}
+        ],
+        setLabelText() {
+            const count = this.selectedOptions.length;
+            if (count === 0) return 'Please Select';
+                return this.selectedOptions.join(', ');
+        },
+        highlightFirstMatchingOption(pressedKey) {
+                if (pressedKey === 'Enter') return
+                    const option = this.options.find((item) =>
+                        item.label.toLowerCase().startsWith(pressedKey.toLowerCase()),
+                )
+                if (option) {
+                    const index = this.options.indexOf(option)
+                    const allOptions = document.querySelectorAll('.combobox-option')
+                if (allOptions[index]) {
+                    allOptions[index].focus()
+                }
+            }
+        },
+        handleOptionToggle(option) {
+            if (option.checked) {
+                this.selectedOptions.push(option.value)
+            } else {
+                this.selectedOptions = this.selectedOptions.filter(
+                    (opt) => opt !== option.value,
+                )
+            }
+            this.$refs.hiddenTextField.value = this.selectedOptions
+        },
+    }" x-init="console.log('Valuess',selectedOptions)" class="w-full max-w-xs flex flex-col gap-1"
     x-on:keydown="highlightFirstMatchingOption($event.key)"
     x-on:keydown.esc.window="isOpen = false, openedWithKeyboard = false">
     <label for="{{ id }}" class="w-fit pl-0.5 text-sm text-neutral-600 dark:text-neutral-300">{{ label }}</label>
     <div class="relative">
-
         <!-- trigger button  -->
         <button type="button" role="combobox"
             class="inline-flex w-full items-center justify-between gap-2 whitespace-nowrap border-neutral-300 bg-neutral-50 px-4 py-2 text-sm font-medium capitalize tracking-wide text-neutral-600 transition hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:border-neutral-700 dark:bg-neutral-900/50 dark:text-neutral-300 dark:focus-visible:outline-white border rounded-md"
@@ -97,7 +95,8 @@
                                 class="combobox-option before:content[''] peer relative size-4 cursor-pointer appearance-none overflow-hidden border border-neutral-300 bg-neutral-50 before:absolute before:inset-0 checked:border-black checked:before:bg-black focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-neutral-800 checked:focus:outline-black active:outline-offset-0 disabled:cursor-not-allowed dark:border-neutral-700 rounded dark:bg-neutral-900 dark:checked:border-white dark:checked:before:bg-white dark:focus:outline-neutral-300 dark:checked:focus:outline-white"
                                 x-on:change="handleOptionToggle($el)"
                                 x-on:keydown.enter.prevent="$el.checked = ! $el.checked; handleOptionToggle($el)"
-                                x-bind:value="item.value" x-bind:id="'{{ id }}-' + index" />
+                                x-bind:checked="selectedOptions.includes(item.value)" x-bind:value="item.value"
+                                x-bind:id="'{{ id }}-' + index" />
                             <!-- Checkmark  -->
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor"
                                 fill="none" stroke-width="4"

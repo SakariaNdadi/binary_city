@@ -14,7 +14,7 @@ def index(request, **kwargs):
     )
     context = {
         "clients": clients,
-        "contacts": list(contacts.values()),
+        "contacts": contacts,
     }
     return render(request, "index.html", context)
 

@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load dcc_tags %}
 {% block title %}Binary City{% endblock title %}
 {% block content %}
 
@@ -138,9 +139,13 @@
         </div>
 
 
-        {% comment %}
-        <c-table id="contact_table" :th="['id','surname','name','email']" :tr="contacts" paginate_by="5" />
-        {% endcomment %}
+        {#<c-table id="contact_table" :th="['id','name','code']" :tr="clients|queryset_to_dict_list" paginate_by="5" />#}
+
     </div>
 </section>
+
+<script>
+    console.log("{{clients|queryset_to_dict_list}}")
+</script>
+
 {% endblock content %}
