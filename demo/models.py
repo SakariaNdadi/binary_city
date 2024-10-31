@@ -5,7 +5,7 @@ from django.urls import reverse
 class Client(models.Model):
     name = models.CharField(max_length=255, unique=True, blank=False, null=False)
     code = models.CharField(
-        max_length=6, unique=True, editable=False, blank=True, null=True
+        max_length=6, unique=True, editable=False, blank=True, null=True, db_index=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -22,7 +22,7 @@ class Client(models.Model):
 class Contact(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False)
     surname = models.CharField(max_length=255, blank=False, null=False)
-    email = models.EmailField(unique=True, blank=False, null=False)
+    email = models.EmailField(unique=True, blank=False, null=False, db_index=True)
     client = models.ManyToManyField(Client, related_name="contacts")
     created_at = models.DateTimeField(auto_now_add=True)
 
