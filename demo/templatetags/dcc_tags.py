@@ -19,3 +19,11 @@ def queryset_to_dict_list(queryset):
     if hasattr(queryset, "values"):
         return list(queryset.values())
     return []
+
+
+@register.simple_tag(takes_context=True)
+def rename(context, old_name, new_name):
+    """Rename a variable in the context without changing its value."""
+    if old_name in context:
+        context[new_name] = context[old_name]
+    return ""

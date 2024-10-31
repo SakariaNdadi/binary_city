@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views, validation
 
 urlpatterns = [
     path("", views.index, name="home"),
@@ -16,4 +16,5 @@ urlpatterns = [
         views.unlink_client,
         name="client_unlink",
     ),
+    path("check_client_name", validation.check_client_name, name="check_client_name"),
 ]

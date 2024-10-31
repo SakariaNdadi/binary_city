@@ -3,11 +3,24 @@
 {% block title %}Binary City{% endblock title %}
 {% block content %}
 
-<section class="">
+<section id="section" class="">
     <div class="pb-5">
         <c-h1 title="Client Table" />
-        <div class="">
+        <div class="flex gap-5">
             <c-button id="client_create_form" title="Create Client" url="{% url 'client_create' %}" />
+
+            <c-modal id="modal" label="Client Create Modal" header="Create Client">
+                <form>
+                    {% csrf_token %}
+                    <c-input id="name" label="name" name="name" placeholder="Enter client name" errorTimer="1000"
+                        autocomplete="off" required hx-post="{% url 'check_client_name' %}"
+                        hx-trigger="keyup changed delay:250ms" hx-target="#error" />
+                    <div id="error"></div>
+                    <br>
+                    <c-button id="client_form_submit" title="Create Client" hx-post="{% url 'client_create' %}"
+                        hx-swap="outerHtml" hx-trigger="click" hx-target="#section" />
+                </form>
+            </c-modal>
         </div>
 
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -144,8 +157,9 @@
     </div>
 </section>
 
+{#
 <script>
     console.log("{{clients|queryset_to_dict_list}}")
 </script>
-
+#}
 {% endblock content %}

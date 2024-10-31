@@ -5,7 +5,8 @@
 {% block content %}
 <form id="" method="post">
     {% csrf_token %}
-    <c-input id="name" label="name" name="name" placeholder="Enter client name" required />
+    <c-input id="name" name="name" placeholder="Enter client name" errorTimer="5000" required autocomplete="off"
+        validationUrl="{% url 'check_client_name' %}" />
     <br>
     <c-button id="client_form_submit" title="Create Client" type="submit" />
 </form>
